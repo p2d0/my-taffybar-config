@@ -37,23 +37,31 @@ main = do
         defaultGraphConfig
           { graphDataColors = [(0, 1, 0, 1), (1, 0, 1, 0.5)]
           }
-        -- \61463
+      -- \61463
       clock = textClockNewWith $ defaultClockConfig {clockFormatString = "%H:%M %a, %d %b"}
       -- cpu = pollingGraphNew cpuCfg 0.5 cpuCallback
       workspaces =
-        flip widgetSetClassGI "workspaces"
-          =<< workspacesNew
-            defaultWorkspacesConfig
-              { minIcons = 1,
-                getWindowIconPixbuf =
-                  scaledWindowIconPixbufGetter $
-                    getWindowIconPixbufFromChrome
-                      <|||> unscaledDefaultGetWindowIconPixbuf
-                      <|||> (\size _ -> lift $ loadPixbufByName size "application-default-icon"),
-                widgetGap = 0,
-                showWorkspaceFn = hideEmpty,
-                updateRateLimitMicroseconds = 100000
-              }
+        workspacesNew
+          defaultWorkspacesConfig
+            { showWorkspaceFn = hideEmpty,
+              updateRateLimitMicroseconds = 1000000,
+              urgentWorkspaceState = True
+            }
+
+      -- workspaces =
+      --   flip widgetSetClassGI "workspaces"
+      --     =<< workspacesNew
+      --       defaultWorkspacesConfig
+      --         { minIcons = 1,
+      --           getWindowIconPixbuf =
+      --             scaledWindowIconPixbufGetter $
+      --               getWindowIconPixbufFromChrome
+      --                 <|||> unscaledDefaultGetWindowIconPixbuf
+      --                 <|||> (\size _ -> lift $ loadPixbufByName size "application-default-icon"),
+      --           widgetGap = 0,
+      --           showWorkspaceFn = hideEmpty,
+      --           updateRateLimitMicroseconds = 100000
+      --         }
       vpn =
         clickableWidget
           ClickableWidgetConfig
@@ -73,8 +81,7 @@ main = do
               [ clock
               ],
             endWidgets =
-              [
-                -- cpu,
+              [ -- cpu,
                 sniTrayNew,
                 commandRunnerNew 6000 "curl" ["-s", "https://wttr.in/?format=%c%20%t%20(%f)"] "Failed",
                 vpn
