@@ -44,7 +44,8 @@ main = do
         workspacesNew
           defaultWorkspacesConfig
             { showWorkspaceFn = hideEmpty,
-              updateRateLimitMicroseconds = 1000000,
+              updateRateLimitMicroseconds = 1000,
+              getWindowIconPixbuf = scaledWindowIconPixbufGetter  getWindowIconPixbufFromEWMH,
               urgentWorkspaceState = True
             }
 
