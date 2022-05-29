@@ -4,6 +4,7 @@ import ClickableWidget
 import Control.Monad.Trans.Class
 import Data.Map (insert)
 import Data.Maybe
+import Data.Ratio
 import StatusNotifier.Tray
 import System.Taffybar
 import System.Taffybar.Information.CPU
@@ -45,7 +46,7 @@ main = do
           defaultWorkspacesConfig
             { showWorkspaceFn = hideEmpty,
               updateRateLimitMicroseconds = 1000,
-              getWindowIconPixbuf = scaledWindowIconPixbufGetter  getWindowIconPixbufFromEWMH,
+              getWindowIconPixbuf = scaledWindowIconPixbufGetter getWindowIconPixbufFromEWMH,
               urgentWorkspaceState = True
             }
 
@@ -71,7 +72,9 @@ main = do
               onLeftClick = "~/.config/polybar/wg-status.sh",
               onFail = "Failed"
             }
-      tray = sniTrayNewFromParams defaultTrayParams
+      tray =
+        sniTrayNewFromParams
+          defaultTrayParams
       simpleConfig =
         defaultSimpleTaffyConfig
           { startWidgets =
@@ -84,7 +87,7 @@ main = do
             endWidgets =
               [ -- cpu,
                 sniTrayNew,
-                commandRunnerNew 6000 "curl" ["-s", "https://wttr.in/?format=%c%20%t%20(%f)"] "Failed",
+                commandRunnerNew 6000 "curl" ["-s", "https://wttr.in/?format=%c%20%t%20(%f)"] "Fail",
                 vpn
               ],
             barPosition = Bottom,
