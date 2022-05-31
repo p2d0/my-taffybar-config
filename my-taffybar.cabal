@@ -10,7 +10,7 @@ executable my-taffybar
   main-is:             taffybar.hs
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   ghc-prof-options: -fprof-auto
-  other-modules: ClickableWidget
+  -- other-modules: ClickableWidget
   build-depends:       base
                      , X11
                      , bytestring
