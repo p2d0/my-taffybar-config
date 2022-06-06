@@ -17,6 +17,7 @@ import System.Taffybar.Widget
 import System.Taffybar.Widget.Generic.Graph
 import System.Taffybar.Widget.Generic.PollingGraph
 import System.Taffybar.Widget.Generic.PollingLabel
+import System.Taffybar.Widget.WttrIn
 
 main = do
   let -- \61463
@@ -34,16 +35,17 @@ main = do
       simpleConfig =
         defaultSimpleTaffyConfig
           { startWidgets =
-              [
-                workspaces
+              [ workspaces
               ],
             barHeight = ScreenRatio $ 1 / 35,
             centerWidgets =
-              [ clock
+              [clock
               ],
             endWidgets =
-              [ sniTrayNew
-                -- commandRunnerNew 6000 "curl" ["-s", "https://wttr.in/?format=%c%20%t%20(%f)"] "Fail"
+              [ sniTrayNew,
+              pollingLabelNew 0.1 (T.pack <$> shell "tail -n 1 /home/andrew/build/twitch-chat-cli/test.txt | ansifilter -M -f")
+              -- textWttrNew "http://wttr.in/?format=%c%20%t%20(%f)" 60
+
               ],
             barPosition = Bottom
           }
