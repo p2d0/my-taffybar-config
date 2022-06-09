@@ -50,6 +50,7 @@ main = do
             barHeight = ScreenRatio $ 1 / 35,
             centerWidgets =
               [ clock
+                  -- textWttrNew "http://wttr.in/Moscow?format=1" 6000
               ],
             endWidgets =
               [ sniTrayNew,
@@ -58,8 +59,8 @@ main = do
                 --   "tail"
                 --   ["-n", "1", "/home/andrew/build/twitch-chat-cli/test.txt"]
                 --   "FAIL"
-                  pollingLabelNew 0.1 twitchChat
-                  -- textWttrNew "http://wttr.in/?format=%c%20%t%20(%f)" 60
+                  pollingLabelNew 0.1 twitchChat,
+                  textWttrNew "pepega" 60
               ],
             barPosition = Bottom
           }
