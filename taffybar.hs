@@ -56,7 +56,8 @@ main = do
               ],
             endWidgets =
               [ sniTrayNew,
-                pollingLabelNew 0.1 twitchChat
+                   commandRunnerNew 0.1 "tail" ["-n", "1", "/home/andrew/build/twitch-chat-cli/test.txt"] "FAIL"
+                   -- pollingLabelNew 0.1 twitchChat
               ],
             barPosition = Bottom
           }
