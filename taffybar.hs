@@ -55,8 +55,8 @@ main = do
                 commandRunnerNew 1800 "curl" ["-s", "https://wttr.in/?format=%c%20%t%20(%f)"] "Fail"
               ],
             endWidgets =
-              [ sniTrayNew,
-                   commandRunnerNew 0.1 "tail" ["-n", "1", "/home/andrew/build/twitch-chat-cli/test.txt"] "FAIL"
+              [ sniTrayNew
+                   -- commandRunnerNew 0.1 "tail" ["-n", "1", "/home/andrew/build/twitch-chat-cli/test.txt"] "FAIL"
                    -- pollingLabelNew 0.1 twitchChat
               ],
             barPosition = Bottom
