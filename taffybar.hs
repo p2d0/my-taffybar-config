@@ -38,16 +38,22 @@ main = do
         workspacesNew
           defaultWorkspacesConfig
             { showWorkspaceFn = hideEmpty,
-              updateRateLimitMicroseconds = 1000,
-              getWindowIconPixbuf = scaledWindowIconPixbufGetter getWindowIconPixbufFromEWMH,
-              urgentWorkspaceState = True
+              updateEvents = [ewmhActiveWindow
+                             , ewmhStateHidden
+                             -- , ewmhCurrentDesktop
+                             ],
+              updateRateLimitMicroseconds = 1000000
+              -- updateRateLimitMicroseconds = 1000,
+              -- getWindowIconPixbuf = scaledWindowIconPixbufGetter getWindowIconPixbufFromClass
+              -- urgentWorkspaceState = True
             }
       tray = sniTrayNewFromParams defaultTrayParams
 
       simpleConfig =
         defaultSimpleTaffyConfig
           { startWidgets =
-              [ workspaces
+              [
+                workspaces
               ],
             barHeight = ScreenRatio $ 1 / 35,
             centerWidgets =
@@ -55,8 +61,8 @@ main = do
                 commandRunnerNew 1800 "curl" ["-s", "https://wttr.in/?format=%c%20%t%20(%f)"] "Fail"
               ],
             endWidgets =
-              [ sniTrayNew,
-                   commandRunnerNew 0.1 "tail" ["-n", "1", "/home/andrew/build/twitch-chat-cli/test.txt"] "FAIL"
+              [ sniTrayNew
+                   -- commandRunnerNew 0.1 "tail" ["-n", "1", "/home/andrew/build/twitch-chat-cli/test.txt"] "FAIL"
                    -- pollingLabelNew 0.1 twitchChat
               ],
             barPosition = Bottom
