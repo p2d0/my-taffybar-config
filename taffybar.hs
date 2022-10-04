@@ -28,7 +28,9 @@ import System.Taffybar.Widget.WttrIn
 twitchChat :: IO T.Text
 twitchChat =
   do
-    text <- readFile "/home/andrew/build/twitch-chat-cli/test.txt"
+    h <- openFile "/home/andrew/build/twitch-chat-cli/test.txt" ReadMode
+    -- hSetEncoding h utf8
+    text <- hGetContents h
     return $ T.pack $ last $ lines text
 
 main = do
@@ -38,10 +40,11 @@ main = do
         workspacesNew
           defaultWorkspacesConfig
             { showWorkspaceFn = hideEmpty,
-              updateEvents = [ewmhActiveWindow
-                             , ewmhStateHidden
-                             -- , ewmhCurrentDesktop
-                             ],
+              updateEvents =
+                [ ewmhActiveWindow,
+                  ewmhStateHidden
+                  -- , ewmhCurrentDesktop
+                ],
               updateRateLimitMicroseconds = 1000000
               -- updateRateLimitMicroseconds = 1000,
               -- getWindowIconPixbuf = scaledWindowIconPixbufGetter getWindowIconPixbufFromClass
@@ -52,8 +55,7 @@ main = do
       simpleConfig =
         defaultSimpleTaffyConfig
           { startWidgets =
-              [
-                workspaces
+              [ workspaces
               ],
             barHeight = ScreenRatio $ 1 / 35,
             centerWidgets =
@@ -62,8 +64,8 @@ main = do
               ],
             endWidgets =
               [ sniTrayNew
-                   -- commandRunnerNew 0.1 "tail" ["-n", "1", "/home/andrew/build/twitch-chat-cli/test.txt"] "FAIL"
-                   -- pollingLabelNew 0.1 twitchChat
+                -- commandRunnerNew 0.1 "tail" ["-n", "1", "/home/andrew/build/twitch-chat-cli/test.txt"] "FAIL"
+                -- pollingLabelNew 0.1 twitchChat
               ],
             barPosition = Bottom
           }
