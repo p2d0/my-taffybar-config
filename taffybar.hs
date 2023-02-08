@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 import Control.Exception (SomeException, handle)
-import Control.Monad.IO.Class (liftIO)
+import Control.Monad.IO.Class (liftIO, MonadIO)
 import Control.Monad.Trans.Class
 import Data.Map (insert)
 import Data.Maybe
@@ -24,6 +24,7 @@ import System.Taffybar.Widget.Generic.Graph
 import System.Taffybar.Widget.Generic.PollingGraph
 import System.Taffybar.Widget.Generic.PollingLabel
 import System.Taffybar.Widget.WttrIn
+import GI.Gtk (labelNew, Widget, toWidget, gridNew, containerAdd, widgetShowAll)
 
 twitchChat :: IO T.Text
 twitchChat =
@@ -32,6 +33,17 @@ twitchChat =
     -- hSetEncoding h utf8
     text <- hGetContents h
     return $ T.pack $ last $ lines text
+
+simpleText :: Control.Monad.IO.Class.MonadIO m => T.Text -> m GI.Gtk.Widget
+simpleText text =
+  liftIO $ do
+  grid <- gridNew
+  label <- labelNew (Just text)
+  vFillCenter label
+  vFillCenter grid
+  containerAdd grid label
+  widgetShowAll grid
+  toWidget grid
 
 main = do
   let -- \61463
@@ -43,7 +55,7 @@ main = do
               updateEvents =
                 [ ewmhActiveWindow,
                   ewmhStateHidden
-                  -- , ewmhCurrentDesktop
+                  , ewmhCurrentDesktop
                 ],
               updateRateLimitMicroseconds = 1000000
               -- updateRateLimitMicroseconds = 1000,
@@ -54,12 +66,14 @@ main = do
 
       simpleConfig =
         defaultSimpleTaffyConfig
-          { startWidgets =
+          {
+            startWidgets =
               [ workspaces
               ],
             barHeight = ScreenRatio $ 1 / 35,
             centerWidgets =
               [ clock,
+                simpleText "DONT FORGET TO START THE EMACS TIMER",
                 commandRunnerNew 1800 "curl" ["-s", "https://wttr.in/?format=%c%20%t%20(%f)"] "Fail"
               ],
             endWidgets =
@@ -70,7 +84,7 @@ main = do
             barPosition = Bottom
           }
   setLocaleEncoding utf8
-  handle logException $ simpleTaffybar simpleConfig
+  simpleTaffybar simpleConfig
 
 -- Logs an Http Exception and returns wttr.in's weather unknown label.
 logException :: SomeException -> IO ()
