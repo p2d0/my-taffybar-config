@@ -25,6 +25,7 @@ import System.Taffybar.Widget.Generic.PollingGraph
 import System.Taffybar.Widget.Generic.PollingLabel
 import System.Taffybar.Widget.WttrIn
 import GI.Gtk (labelNew, Widget, toWidget, gridNew, containerAdd, widgetShowAll)
+import System.Taffybar.Context (BarConfig)
 
 twitchChat :: IO T.Text
 twitchChat =
@@ -44,6 +45,10 @@ simpleText text =
   containerAdd grid label
   widgetShowAll grid
   toWidget grid
+
+-- getBars :: IO [BarConfig]
+-- getBars = do
+--   pure $ defaultBarConfig
 
 main = do
   let -- \61463
@@ -65,7 +70,7 @@ main = do
       tray = sniTrayNewFromParams defaultTrayParams
 
       simpleConfig =
-        defaultSimpleTaffyConfig
+        toTaffyConfig defaultSimpleTaffyConfig
           {
             startWidgets =
               [ workspaces
@@ -84,7 +89,7 @@ main = do
             barPosition = Bottom
           }
   setLocaleEncoding utf8
-  simpleTaffybar simpleConfig
+  dyreTaffybar simpleConfig
 
 -- Logs an Http Exception and returns wttr.in's weather unknown label.
 logException :: SomeException -> IO ()
